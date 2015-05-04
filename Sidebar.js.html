@@ -1,0 +1,43 @@
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+$('#save').click(function() {
+  $('#save').attr('disabled', 'true');
+  submitForm();
+});
+
+$('#send').click(function() {
+  $('#send').attr('disabled', 'true');
+  attemptToSendEmail();
+});
+
+function submitForm() {
+  var formNode = document.getElementById('email'); // native DOM element necessary
+
+  google.script.run
+      .withSuccessHandler(formUpdateSuccess)
+      .withFailureHandler(failure)
+      .processForm(formNode);
+
+  function formUpdateSuccess() {
+    $('#save').removeAttr('disabled');
+  }
+}
+
+function attemptToSendEmail() {
+  submitForm(); // save before sending
+
+  google.script.run
+      .withSuccessHandler(sendCallback)
+      .withFailureHandler(failure)
+      .sendConfirmation();
+
+  function sendCallback(response) {
+    // response is the answer to yes/no to sending
+    $('#send').removeAttr('disabled');
+  }
+}
+
+function failure() {
+  alert('Message from Brandon Cheng: Uh.. wait. error. wat. This is not supposed to happen. I have failed you.');
+}
+</script>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<?!= include('Sidebar.css'); ?>
+</head>
+<body>
+
+<?
+// Convert true/false into checked or not
+automaticChecked = user.getProperty('automatic') == 'true' ? 'checked' : '';
+?>
+
+<div class="sidebar">
+  <form id="email">
+
+    <!-- Automatically send emails at 10 PM -->
+    <div class="block form-group">
+      <input type="checkbox" id="automatic" name="automatic" <?= automaticChecked ?>>
+      <label for="automatic">Automatically send emails an hour after a Full Team Meeting. This setting is per-user.</label>
+    </div>
+
+    <!-- To -->
+    <div class="block form-group">
+      <label for="title"><strong>To:</strong></label>
+      <input type="text" id="to" name="to" value="<?= document.getProperty('to') ?>">
+    </div>
+
+    <!-- Title -->
+    <div class="block form-group">
+      <label for="title"><strong>Title:</strong></label>
+      <br />
+      <div class="inline"><?= dayForEmailTitle ?></div>
+      <div class="inline"><input type="text" id="title" name="title" value="<?= document.getProperty('title') ?>"></div>
+    </div>
+
+    <!-- Body -->
+    <div class="block form-group">
+      <label for="body"><strong>Body:</strong></label>
+      <textarea id="body" name="body" rows="10"><?= document.getProperty('body'); ?></textarea>
+    </div>
+
+    <!-- Notes, Project Updates & Upcoming Events -->
+    <div class="block">
+      <!-- We have to use document.write since Google Apps Script templates filter HTML -->
+      <script>
+        document.write(<?= notes ?>);
+        document.write(<?= projectUpdate ?>);
+        document.write(<?= upcomingEvents ?>);
+      </script>
+    </div>
+
+    <!-- Save & Send Button -->
+    <div class="block">
+      <button class="blue" id="save">Save</button>
+      <button class="red" id="send">Send email manually</button>
+    </div>
+  </form>
+</div>
+
+<?!= include('Sidebar.js'); ?>
+
+</body>
+</html>
